@@ -22,6 +22,7 @@ class CoursesState extends State<Courses> {
       
     body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         ElevatedButton(
           onPressed: () {

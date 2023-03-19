@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "46059946446",
+    "project_id": "bahrain-student-app",
+    "storage_bucket": "bahrain-student-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:46059946446:android:3d6b012d2c3bec6249eb9f",
+        "android_client_info": {
+          "package_name": "com.example.studentapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "46059946446-5p4h8rmm5p87uv9gpg0386vpk8rh41od.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCH5oA5y5Fxl1W7fXWMX4sL8agyvUOOROw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "46059946446-5p4h8rmm5p87uv9gpg0386vpk8rh41od.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

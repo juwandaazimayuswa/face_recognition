@@ -1,16 +1,17 @@
 # studentapp
 
-A new Flutter project.
+A student attendance mobile application using flutter. It makes use of state of the art deep learning and facial recognition models.
 
-## Getting Started
+# Setting up the project
 
-This project is a starting point for a Flutter application.
+## 1. Download jnilib directory from the following link
 
-A few resources to get you started if this is your first Flutter project:
+url: https://github.com/YashMakan/face_auth_flutter/tree/master/android/app/src/main/jniLibs
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+You may use this website to download a github directory. https://download-directory.github.io/
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Once the jnilibs folder is downloaded, place it in the android/app/src/main/ folder of your project
+
+## 2. 
+
+
