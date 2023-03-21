@@ -29,12 +29,14 @@ class _GetMoreStudentInfoState extends State<GetMoreStudentInfo> {
       });
     }
   }
+
   void _getFaceId() async {
     XFile _profilePicFile = await Navigator.push(context, MaterialPageRoute(builder: (context) => GetFaceId()));
     setState(() {
       faceIdFile = _profilePicFile;
     });
   }
+
   void validateInput() {
     if(faceIdFile != null && profilePicFile != null) {
       Navigator.pop(context, {"profile_pic_file" : File(profilePicFile!.path!) , "face_id_file" : File(faceIdFile!.path)});
@@ -43,18 +45,29 @@ class _GetMoreStudentInfoState extends State<GetMoreStudentInfo> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GenericButton(onPressed: _selectProfilePicture, text: "Choose Profile Pic"),
-          SizedBox(height: 20),
-          GenericButton(onPressed: _getFaceId, text: "Face ID"),
-          SizedBox(height: 30),
-          GenericButton(onPressed: validateInput, text: "Confirm", isEnabled: faceIdFile != null && profilePicFile != null )
-        ],
-      )
+    return Container(
+      alignment: Alignment.center,
+      padding: EdgeInsets.all(32),
+      decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("images/UOB6-2.png"),
+          fit: BoxFit.cover,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GenericButton(onPressed: _selectProfilePicture, text: "Choose Profile Pic"),
+            SizedBox(height: 20),
+            GenericButton(onPressed: _getFaceId, text: "Face ID"),
+            SizedBox(height: 30),
+            GenericButton(onPressed: validateInput, text: "Submit", isEnabled: faceIdFile != null && profilePicFile != null )
+          ],
+        )
+      ),
     );
   }
 }

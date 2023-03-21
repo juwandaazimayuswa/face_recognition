@@ -1,5 +1,3 @@
-import 'dart:html';
-
 import "package:flutter/material.dart";
 import 'package:studentapp/constants.dart';
 
@@ -9,7 +7,7 @@ class GenericButton extends StatelessWidget {
   String text;
   bool isEnabled;
 
-  GenericButton({Key? key,required this.onPressed, required this.text, this.isEnabled = false}) : super(key : key);
+  GenericButton({Key? key,required this.onPressed, required this.text, this.isEnabled = true}) : super(key : key);
 
   @override
   Widget build(BuildContext context) {

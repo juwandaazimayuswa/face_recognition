@@ -45,6 +45,7 @@ dependencies:
   path_provider:
   modal_progress_hud_nsn:
   camera:
+  provider:
 
 
 dev_dependencies:

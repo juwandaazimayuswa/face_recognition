@@ -6,10 +6,11 @@ import 'ui/home.dart';
 import 'ui/courses.dart';
 import 'ui/getMoreStudentInfo/getFaceId.dart';
 import 'ui/getMoreStudentInfo/getMoreStudentInfo.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 void main() async { 
-  //WidgetsFlutterBinding.ensureInitialized();
-  //await Firebase.initializeApp();
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
 
    runApp(MaterialApp(
     initialRoute: '/',
