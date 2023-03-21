@@ -11,7 +11,7 @@ class GetFaceId extends StatefulWidget {
 
 class _GetFaceIdState extends State<GetFaceId> {
   late CameraController _controller;
-  late Future<void> _initializeControllerFuture;
+  Future<void>? _initializeControllerFuture;
   XFile? imageFile;
 
   @override
@@ -19,14 +19,20 @@ class _GetFaceIdState extends State<GetFaceId> {
     super.initState();
     // Get the list of available cameras.
     availableCameras().then((cameras) {
+      debugPrint("Retreived available cameras");
       // Select the first camera from the list.
-      final firstCamera = cameras.first;
+      final firstCamera = cameras[1];
       // Create a CameraController instance and initialize it.
       _controller = CameraController(
         firstCamera,
         ResolutionPreset.high,
       );
-      _initializeControllerFuture = _controller.initialize();
+      debugPrint("Initializing Camera controller");
+
+      setState(() {
+        _initializeControllerFuture = _controller.initialize();
+      });
+
     });
   }
 
@@ -58,17 +64,26 @@ class _GetFaceIdState extends State<GetFaceId> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text('Face Id')),
-      body: FutureBuilder(
-        future: _initializeControllerFuture,
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.done && imageFile == null ) {
-              return CameraPreview(_controller);
-          } else if (imageFile != null){
-              return Center(child: Image.file(File(imageFile!.path)));
-          } else {
-            return Center(child: CircularProgressIndicator());
-          }
-        },
+      body: _initializeControllerFuture == null
+          ? Center(child: CircularProgressIndicator())
+          :  FutureBuilder(
+              future: _initializeControllerFuture,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.done) {
+                  debugPrint("Displaying camera preview");
+                  final mediaSize = MediaQuery.of(context).size;
+                    return Center(
+                      child: Transform.scale(
+                          scale: 1 / (_controller.value.aspectRatio  * mediaSize.aspectRatio),
+                          alignment: Alignment.center,
+                          child: CameraPreview(_controller)),
+                    );
+                } else if (imageFile != null){
+                    return Center(child: Image.file(File(imageFile!.path)));
+                } else {
+                  return Center(child: CircularProgressIndicator());
+                }
+              },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _takePhoto,

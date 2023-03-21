@@ -46,7 +46,7 @@ class CoursesState extends State<Courses> {
           itemBuilder: (context, index) => ListTile(
             title: Text("${courses[index].name}"),
             subtitle: Text("${courses[index].code}".toUpperCase()),
-            trailing: Icon(Icons.circle, color: courses[index].isStudPresent ? Colors.green : Colors.green),
+            trailing: Icon(Icons.circle, color: courses[index].isStudPresent ? Colors.green : Colors.grey),
             onTap: () async{
               XFile faceIdFile = await Navigator.push(context, MaterialPageRoute(builder: (context) => GetFaceId()));
 

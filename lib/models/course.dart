@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Course {
   String? name;
   String? id;
-  List<String?> students;
+  List<dynamic> students;
   String? code;
 
   Course({this.name, this.id, this.students = const [], this.code});
@@ -15,7 +15,7 @@ class Course {
     return Course(
       name: data['name'] as String,
       id: data['id'] as String,
-      students : data['students'] as List<String?>,
+      students : data['students'] as List<dynamic>,
       code: data['code'] as String
     );
   }
