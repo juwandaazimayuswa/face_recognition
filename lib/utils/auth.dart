@@ -4,9 +4,12 @@ import "package:firebase_auth/firebase_auth.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:firebase_storage/firebase_storage.dart";
 import "package:flutter/material.dart";
+import 'package:studentapp/models/user_data.dart';
 import "package:studentapp/ui/getMoreStudentInfo/getMoreStudentInfo.dart";
 import "package:path/path.dart" as path;
-import 'package:studentapp/ui/home.dart';
+import '../ui/home/home.dart';
+import 'package:studentapp/data/user_data.dart';
+
 
 Future<void> loginUser({required String email, required String password, required BuildContext context}) async {
   try {
@@ -43,11 +46,13 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   FirebaseStorage storage = FirebaseStorage.instance;
 
 
-
   //Try getting this users information
   try{
     DocumentSnapshot doc = await db.collection("students").doc(auth.currentUser!.uid).get();
-    if(doc.exists) return true;
+    if(doc.exists && doc['profile_pic_url'] != null && doc['face_id_url'] != null) {
+      userData = UserData.fromFirestore(doc);
+      return true;
+    }
   } catch(e) {
     debugPrint("$e");
   }
@@ -60,10 +65,20 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   File faceIdFile = userInfo["face_id_file"];
   String faceIdFileExtension = path.extension(faceIdFile.path);
   String filename = auth.currentUser!.uid;
-  Reference profilePicStorageRef = storage.ref().child('profile_pictures/$filename.$profilePicExtension');
-  Reference faceIdStorageRef = storage.ref().child('face_ids/$filename.$faceIdFileExtension');
+  Reference profilePicStorageRef = storage.ref().child('profile_pictures/$filename$profilePicExtension');
+  Reference faceIdStorageRef = storage.ref().child('face_ids/$filename$faceIdFileExtension');
+
+  ///Get download urls
+
   String? profilePicDownloadUrl;
   String? faceIdDownloadUrl;
+
+  try {
+    profilePicDownloadUrl = await profilePicStorageRef.getDownloadURL();
+    faceIdDownloadUrl = await faceIdStorageRef.getDownloadURL();
+  } catch(e) {
+    debugPrint("Unable to get download url: $e");
+  }
   UploadTask profilePicUploadTask =  profilePicStorageRef.putFile(profilePicFile);
   UploadTask faceIdUploadTask = faceIdStorageRef.putFile(faceIdFile);
   bool isFaceIdUploadComplete = false;
@@ -72,18 +87,13 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   int uploadTime = 0;
 
 
+
   //listen to upload task as and update the ui accordingly
   profilePicUploadTask.snapshotEvents.listen((taskSnapshot) async{
-    if (profilePicDownloadUrl == null) {
-      profilePicDownloadUrl = await taskSnapshot.ref.getDownloadURL();
-    }
     /// Update the ui based on the amount of the file uploaded
   });
 
   faceIdUploadTask.snapshotEvents.listen((taskSnapshot) async{
-    if (faceIdDownloadUrl == null) {
-      faceIdDownloadUrl = await taskSnapshot.ref.getDownloadURL();
-    }
     /// Update the ui based on the amount of the file uploaded
   });
 
@@ -105,7 +115,6 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   if (uploadTime > timeout) return false;
 
   ///Save complete user details in firestore database
-
   try {
     await db.runTransaction((transaction) async{
       DocumentReference docRef = db.collection("students").doc(auth.currentUser!.uid);
@@ -121,5 +130,4 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   } catch(e) {
     return false;
   }
-
 }

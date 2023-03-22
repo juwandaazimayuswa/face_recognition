@@ -4,8 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:studentapp/models/course.dart';
 import 'package:studentapp/ui/getMoreStudentInfo/getFaceId.dart';
 import 'package:studentapp/utils/firestore/read.dart';
-
-import 'home.dart';
+import 'package:studentapp/widgets/navigation_drawer.dart';
 
 class Courses extends StatefulWidget {
   const Courses({super.key});

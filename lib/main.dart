@@ -3,11 +3,12 @@ import 'package:studentapp/constants.dart';
 
 import 'ui/excuses.dart';
 import 'ui/login.dart';
-import 'ui/home.dart';
+import 'ui/home/home.dart';
 import 'ui/courses.dart';
 import 'ui/getMoreStudentInfo/getFaceId.dart';
 import 'ui/getMoreStudentInfo/getMoreStudentInfo.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:studentapp/constants.dart';
 
 void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,7 @@ void main() async {
     initialRoute: '/',
     theme: ThemeData(
       primaryColor: kAppColor,
-      primarySwatch: MaterialColor(),
+      primarySwatch: kMaterialAppColor,
     ),
     routes: {
       '/':(context) => login(),

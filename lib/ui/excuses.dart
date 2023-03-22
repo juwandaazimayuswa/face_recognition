@@ -1,9 +1,7 @@
-import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-
-import 'home.dart';
+import 'package:studentapp/constants.dart';
+import 'package:studentapp/widgets/navigation_drawer.dart';
 
 const List<String> list = <String>['One', 'Two', 'Three', 'Four'];
 
@@ -25,13 +23,12 @@ final NoteController = TextEditingController();
   FilePickerResult? resultFile = await FilePicker.platform.pickFiles();
     if(resultFile != null){
       PlatformFile file = resultFile.files.first;
-      print(file.name);
-      print(file.bytes);
-      print(file.extension);
-      print(file.path);
+      debugPrint(file.name);
+      debugPrint("${file.bytes}");
+      debugPrint(file.extension);
+      debugPrint(file.path);
   } else{
     // if the user cancelled the picker
-
   }
  }
 
@@ -41,7 +38,7 @@ final NoteController = TextEditingController();
     return Scaffold(
       appBar: AppBar(
         title: Text('Excuses'),
-        backgroundColor: Color.fromARGB(255, 126, 13, 13),
+        backgroundColor: kAppColor,
       ),
       //backgroundColor: Colors.grey,
       drawer: const NavigationDrawer() ,
@@ -104,7 +101,7 @@ final NoteController = TextEditingController();
                         // file picker
                         openFiles();
                       },
-                      color: Color.fromARGB(255, 126, 13, 13),
+                      color: kAppColor,
                       child: Text(
                         'Import',
                         style: TextStyle(
@@ -165,7 +162,6 @@ final NoteController = TextEditingController();
 
 
 // DropDown List
-
 class DropdownButtonExample extends StatefulWidget {
   const DropdownButtonExample({super.key});
 
