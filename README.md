@@ -14,15 +14,22 @@ Once the jnilibs folder is downloaded, place it in the android/app/src/main/ fol
 
 ## 2. Set the minimum sdk version in the app/build.gradle to 21
 defaultConfig {
+
     ...
+    
     minSdkVersion 21
+    
     ...
+    
 }
 
 ## 3. Download the assets folder from the link: https://github.com/YashMakan/face_auth_flutter/tree/master/assets
 Once the assets folder has been downloaded, place it in the project root directory.
+
 Note: the assets folder should contain 
+
 1. the model named: mobilefacenet.tflite
+
 2. loading file: loading.json
 
 
