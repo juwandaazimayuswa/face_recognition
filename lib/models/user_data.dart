@@ -1,6 +1,8 @@
 import 'dart:core';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
 
 
 class UserData {
@@ -15,10 +17,16 @@ class UserData {
   UserData({required this.name, required this.userId, required this.faceIdUrl, required this.profilePicUrl, required this.email, required this.password});
 
   factory UserData.fromFirestore(var doc) {
-    Map<String, dynamic> data = doc as Map<String, dynamic>;
+    late Map<String, dynamic> data;
+    try {
+      data = doc.data() ?? {};
+    } catch(e) {
+      debugPrint("Unable to extract data from user document: $e");
+    }
+
     return UserData(
       name: data['name'],
-      userId: data['id'],
+      userId: data['id'] ?? FirebaseAuth.instance.currentUser!.uid,
       faceIdUrl: data['face_id_url'],
       profilePicUrl: data['profile_pic_url'],
       email: data['email'],

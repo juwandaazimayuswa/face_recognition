@@ -19,7 +19,7 @@ Widget buildHeader(BuildContext context) => Container(
         backgroundColor: Colors.white,
         radius: 52,
         child: FirebaseImage(
-          imageUrl: userData.profilePicUrl ,
+          imageUrl: myUserData!.profilePicUrl ,
         ),
         //backgroundImage: ,
       ),

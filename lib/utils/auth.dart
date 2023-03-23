@@ -11,7 +11,7 @@ import '../ui/home/home.dart';
 import 'package:studentapp/data/user_data.dart';
 
 
-Future<void> loginUser({required String email, required String password, required BuildContext context}) async {
+Future<void> loginUser({ String email = "nsahsimonai01@gmail.com",  String password = "1234asdf", required BuildContext context}) async {
   try {
     UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: email,
@@ -39,7 +39,6 @@ Future<void> loginUser({required String email, required String password, require
 }
 
 
-
 Future<bool> isUserInfoComplete({required String userEmail, required String userPwd, required BuildContext context}) async{
   FirebaseAuth auth = FirebaseAuth.instance;
   FirebaseFirestore db = FirebaseFirestore.instance;
@@ -50,7 +49,7 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   try{
     DocumentSnapshot doc = await db.collection("students").doc(auth.currentUser!.uid).get();
     if(doc.exists && doc['profile_pic_url'] != null && doc['face_id_url'] != null) {
-      userData = UserData.fromFirestore(doc);
+      myUserData = UserData.fromFirestore(doc);
       return true;
     }
   } catch(e) {
@@ -76,8 +75,11 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   try {
     profilePicDownloadUrl = await profilePicStorageRef.getDownloadURL();
     faceIdDownloadUrl = await faceIdStorageRef.getDownloadURL();
+    debugPrint("Profile Pic download UrL: $profilePicDownloadUrl");
+    debugPrint("face Id download Url: $faceIdDownloadUrl");
   } catch(e) {
     debugPrint("Unable to get download url: $e");
+    return false;
   }
   UploadTask profilePicUploadTask =  profilePicStorageRef.putFile(profilePicFile);
   UploadTask faceIdUploadTask = faceIdStorageRef.putFile(faceIdFile);
@@ -126,6 +128,15 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
         "face_id_url" : faceIdDownloadUrl
       });
     });
+
+    myUserData = UserData(
+        name: "N/A",
+        userId: auth.currentUser!.uid,
+        faceIdUrl: faceIdDownloadUrl??"",
+        profilePicUrl: profilePicDownloadUrl??"",
+        email: userEmail,
+        password: userPwd);
+    
     return true;
   } catch(e) {
     return false;

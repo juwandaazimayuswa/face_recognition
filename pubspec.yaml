@@ -47,6 +47,7 @@ dependencies:
   camera:
   provider:
   http:
+  google_ml_kit:
 
 
 dev_dependencies:

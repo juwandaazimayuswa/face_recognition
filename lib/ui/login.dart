@@ -3,11 +3,6 @@ import 'dart:ui';
  
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'home/home.dart';
 import 'package:studentapp/utils/auth.dart';
 
 
@@ -22,8 +17,8 @@ class login extends StatefulWidget {
 
 class loginState extends State<login> {
 
-final usernameController = TextEditingController();
-final passwordController = TextEditingController();
+final usernameController = TextEditingController(text: "nsahsimonai01@gmail.com");
+final passwordController = TextEditingController(text: "1234asdf");
 
 FocusNode inputNode = FocusNode();
 // to open keyboard call this function;

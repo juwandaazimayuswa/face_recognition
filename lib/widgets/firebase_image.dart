@@ -5,7 +5,7 @@ class FirebaseImage extends StatelessWidget {
   final double width;
   final double height;
 
-  FirebaseImage({required this.imageUrl,  this.width = 40.0,  this.height = 40.0});
+  FirebaseImage({required this.imageUrl,  this.width = 100.0,  this.height = 100.0});
 
   @override
   Widget build(BuildContext context) {
@@ -17,3 +17,6 @@ class FirebaseImage extends StatelessWidget {
     );
   }
 }
+
+
+var image  = NetworkImage("");
