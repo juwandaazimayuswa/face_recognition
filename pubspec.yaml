@@ -48,8 +48,7 @@ dependencies:
   provider:
   http:
   google_ml_kit:
-  mlkit:
-  firebase_ml_vision:
+  image:
 
 dev_dependencies:
   flutter_test:

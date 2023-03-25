@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:studentapp/utils/ml_service.dart';
 
 class GetFaceId extends StatefulWidget {
   @override
@@ -42,23 +44,31 @@ class _GetFaceIdState extends State<GetFaceId> {
     super.dispose();
   }
 
+
   void _takePhoto() async {
     try {
       // Ensure that the camera is initialized before taking a photo.
       await _initializeControllerFuture;
-      XFile _imageFile = await _controller.takePicture();
+      File _inputImageFile = File((await _controller.takePicture()).path);
+      // final image = InputImage.fromFile(_inputImageFile);
+      // File? _outputImageFile = await MLService().extractFace(_inputImageFile.path);
+      File? _outputImageFile = await MLService().extractFace(_inputImageFile);
+      if (_outputImageFile == null) return;
       setState(() {
-        imageFile = _imageFile;
+        imageFile = XFile(_outputImageFile.path);
       });
 
-      Future.delayed(Duration(seconds: 3), () async{
+      Future.delayed(const Duration(seconds: 3), () async{
         Navigator.pop(context, imageFile);
       });
 
+      debugPrint("SUCCESSFULLY TOOK PICTURE");
+
     } catch (e) {
-      debugPrint('Error: ${e.toString()}');
+      debugPrint('Error in take photo: ${e.toString()}');
     }
   }
+
 
   @override
   Widget build(BuildContext context) {

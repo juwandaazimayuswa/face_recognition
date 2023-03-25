@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:studentapp/utils/auth.dart';
 import 'package:studentapp/widgets/firebase_image.dart';
 import 'package:studentapp/constants.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -69,8 +70,8 @@ Widget buildMenuItms(BuildContext context) => Wrap(
     ListTile(
       leading: const Icon(Icons.logout_outlined),
       title: const Text('Log Out'),
-      onTap: (){
-        Navigator.pushNamed(context, '/');
+      onTap: () {
+        signOut(context);
       },
     ),
   ],
