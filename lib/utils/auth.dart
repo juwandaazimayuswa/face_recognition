@@ -45,7 +45,6 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   FirebaseFirestore db = FirebaseFirestore.instance;
   FirebaseStorage storage = FirebaseStorage.instance;
 
-
   //Try getting this users information
   try{
     late DocumentSnapshot doc;
@@ -55,7 +54,9 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
     });
 
     debugPrint("User data from firebase: \n profile_pic_url: ${doc['profile_pic_url']}\n face_id_url: ${doc['face_id_url']}");
+
     if(doc.exists && doc['profile_pic_url'] != null && doc['face_id_url'] != null) {
+      debugPrint("Successfully retrieved user data from firebase");
       myUserData = UserData.fromFirestore(doc);
       return true;
     }
@@ -98,8 +99,6 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   // }
 
 
-
-
   //listen to upload task as and update the ui accordingly
   profilePicUploadTask.snapshotEvents.listen((taskSnapshot) async{
     /// Update the ui based on the amount of the file uploaded
@@ -110,49 +109,64 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   });
 
   faceIdUploadTask.whenComplete(() async{
-    isFaceIdUploadComplete = true;
     faceIdDownloadUrl = await faceIdStorageRef.getDownloadURL();
     debugPrint("face Id download Url: $faceIdDownloadUrl");
+    isFaceIdUploadComplete = true;
   });
 
   profilePicUploadTask.whenComplete(()async{
-    isProfilePicUploadComplete = true;
     profilePicDownloadUrl = await profilePicStorageRef.getDownloadURL();
     debugPrint("Profile Pic download UrL: $profilePicDownloadUrl");
+    isProfilePicUploadComplete = true;
   });
 
   /// check at interval of 100 milliseconds if the upload process is complete
   while((isProfilePicUploadComplete == false || isFaceIdUploadComplete == false)) {
-    await Future.delayed(Duration(milliseconds: 100));
+    await Future.delayed(const Duration(milliseconds: 100));
     uploadTime += 100;
-    if (uploadTime > timeout) break;
+    if (uploadTime > timeout) {
+      debugPrint("Profile pic and face id file upload timeout");
+      break;
+    }
   }
 
   if (uploadTime > timeout) return false;
 
   ///Save complete user details in firestore database
+  debugPrint("Saving user data in database");
   try {
-    await db.runTransaction((transaction) async{
-      DocumentReference docRef = db.collection("students").doc(auth.currentUser!.uid);
-      transaction.set(docRef, {
-        "name" : "N/A",
-        "email" : userEmail,
-        "password" : userPwd,
-        "profile_pic_url" : profilePicDownloadUrl,
-        "face_id_url" : faceIdDownloadUrl
-      });
-    });
+    DocumentReference docRef = db.collection("students").doc(auth.currentUser!.uid);
+    await docRef.set(
+      { "name": "N/A",
+        "email": userEmail,
+        "password": userPwd,
+        "profile_pic_url": profilePicDownloadUrl,
+        "face_id_url": faceIdDownloadUrl
+      }, SetOptions(merge: true));
+
+    // await db.runTransaction((transaction) async{
+    //   transaction.set(docRef, {
+    //     "name": "N/A",
+    //     "email": userEmail,
+    //     "password": userPwd,
+    //     "profile_pic_url": profilePicDownloadUrl,
+    //     "face_id_url": faceIdDownloadUrl
+    //   }, SetOptions(merge: true));
+    // });
 
     myUserData = UserData(
         name: "N/A",
         userId: auth.currentUser!.uid,
-        faceIdUrl: faceIdDownloadUrl??"",
-        profilePicUrl: profilePicDownloadUrl??"",
+        faceIdUrl: faceIdDownloadUrl ?? "",
+        profilePicUrl: profilePicDownloadUrl ?? "",
         email: userEmail,
         password: userPwd);
-    
+
+    debugPrint("Successfully saved user data");
     return true;
   } catch(e) {
+    debugPrint("Failed to save user data");
+    debugPrint("$e");
     return false;
   }
 

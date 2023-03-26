@@ -23,7 +23,7 @@ class _GetFaceIdState extends State<GetFaceId> {
     availableCameras().then((cameras) {
       debugPrint("Retreived available cameras");
       // Select the first camera from the list.
-      final firstCamera = cameras[1];
+      final firstCamera = cameras[0];
       // Create a CameraController instance and initialize it.
       _controller = CameraController(
         firstCamera,
