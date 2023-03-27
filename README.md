@@ -32,6 +32,14 @@ Note: the assets folder should contain
 
 2. loading file: loading.json
 
+## Add the following lines to your pubspec.yaml file
+
+  assets:
+  
+    - images/
+    
+    - assets/
+
 
 
 

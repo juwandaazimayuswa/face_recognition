@@ -53,9 +53,9 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
       doc = await transaction.get(userDocRef);
     });
 
-    debugPrint("User data from firebase: \n profile_pic_url: ${doc['profile_pic_url']}\n face_id_url: ${doc['face_id_url']}");
+    debugPrint("User data from firebase: \n profile_pic_url: ${doc['profile_pic_url']}\n face_id: ${doc['face_id']}");
 
-    if(doc.exists && doc['profile_pic_url'] != null && doc['face_id_url'] != null) {
+    if(doc.exists && doc['profile_pic_url'] != null && doc['face_id'] != null) {
       debugPrint("Successfully retrieved user data from firebase");
       myUserData = UserData.fromFirestore(doc);
       return true;
