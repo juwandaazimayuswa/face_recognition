@@ -26,7 +26,7 @@ Widget buildHeader(BuildContext context) => Container(
       ),
       SizedBox(height: 12,),
       Text(
-        'Student@stu.uob.edu.bh',
+        myUserData.email,
         style: TextStyle(fontSize: 18, color: Colors.white),
       ),
     ],

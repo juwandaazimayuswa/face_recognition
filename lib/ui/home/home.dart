@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studentapp/widgets/navigation_drawer.dart';
+import 'package:studentapp/data/user_data.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -25,12 +26,6 @@ class _HomeState extends State<Home> {
       body: Container(
         alignment: Alignment.center,
         padding: EdgeInsets.all(32),
-        decoration: BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("images/background1.jpeg"),
-            fit: BoxFit.cover,
-            ),
-        ),
        child: Column(
         children: [
           SizedBox(height: 30,),
@@ -44,7 +39,7 @@ class _HomeState extends State<Home> {
             ),
             SizedBox(height: 10,),
             Text(
-              'Student@stu.uob.edu.bh',
+              myUserData.email,
               style: TextStyle(
                 fontSize: 20,
                 color: Color.fromARGB(255, 126, 13, 13),

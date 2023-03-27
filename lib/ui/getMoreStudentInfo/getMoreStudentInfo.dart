@@ -6,6 +6,7 @@ import "package:studentapp/widgets/generic_button.dart";
 import "dart:io";
 import "dart:async";
 import "package:camera/camera.dart";
+import 'package:studentapp/utils/ml_service.dart';
 
 
 class GetMoreStudentInfo extends StatefulWidget {
@@ -14,8 +15,8 @@ class GetMoreStudentInfo extends StatefulWidget {
 }
 
 class _GetMoreStudentInfoState extends State<GetMoreStudentInfo> {
-  PlatformFile? profilePicFile;
-  XFile? faceIdFile;
+  File? profilePicFile;
+  List? faceId;
 
   void _selectProfilePicture() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -23,23 +24,26 @@ class _GetMoreStudentInfoState extends State<GetMoreStudentInfo> {
       allowMultiple: false,
     );
 
+
+
     if (result != null) {
+      File resultFile = await MLService().resizeImage(File(result.files.first.path!), 500, 500);
       setState(() {
-        profilePicFile = result.files.first;
+        profilePicFile = resultFile;
       });
     }
   }
 
   void _getFaceId() async {
-    XFile _profilePicFile = await Navigator.push(context, MaterialPageRoute(builder: (context) => GetFaceId()));
+    List? _faceId = await Navigator.push(context, MaterialPageRoute(builder: (context) => GetFaceId()));
     setState(() {
-      faceIdFile = _profilePicFile;
+      faceId = _faceId;
     });
   }
 
   void validateInput() {
-    if(faceIdFile != null && profilePicFile != null) {
-      Navigator.pop(context, {"profile_pic_file" : File(profilePicFile!.path!) , "face_id_file" : File(faceIdFile!.path)});
+    if(faceId != null && profilePicFile != null) {
+      Navigator.pop(context, {"profile_pic_file" : File(profilePicFile!.path!) , "face_id" : faceId!});
     }
   }
 
@@ -64,7 +68,7 @@ class _GetMoreStudentInfoState extends State<GetMoreStudentInfo> {
             SizedBox(height: 20),
             GenericButton(onPressed: _getFaceId, text: "Face ID"),
             SizedBox(height: 30),
-            GenericButton(onPressed: validateInput, text: "Submit", isEnabled: faceIdFile != null && profilePicFile != null )
+            GenericButton(onPressed: validateInput, text: "Submit", isEnabled: faceId != null && profilePicFile != null )
           ],
         )
       ),

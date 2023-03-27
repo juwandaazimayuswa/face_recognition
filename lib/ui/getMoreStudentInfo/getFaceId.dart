@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
-import 'package:google_ml_kit/google_ml_kit.dart';
+// import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:studentapp/utils/ml_service.dart';
 
@@ -14,7 +14,7 @@ class GetFaceId extends StatefulWidget {
 class _GetFaceIdState extends State<GetFaceId> {
   late CameraController _controller;
   Future<void>? _initializeControllerFuture;
-  XFile? imageFile;
+  List? faceId;
 
   @override
   void initState() {
@@ -49,17 +49,16 @@ class _GetFaceIdState extends State<GetFaceId> {
     try {
       // Ensure that the camera is initialized before taking a photo.
       await _initializeControllerFuture;
-      File _inputImageFile = File((await _controller.takePicture()).path);
-      // final image = InputImage.fromFile(_inputImageFile);
-      // File? _outputImageFile = await MLService().extractFace(_inputImageFile.path);
-      File? _outputImageFile = await MLService().extractFace(_inputImageFile);
-      if (_outputImageFile == null) return;
-      setState(() {
-        imageFile = XFile(_outputImageFile.path);
-      });
+      File inputImageFile = File((await _controller.takePicture()).path);
+      List? faceId = await MLService().predictFaceId(inputImageFile);
+      // File? _outputImageFile = _inputImageFile;
+      // if (outputImageFile == null) return;
+      // setState(() {
+      //    = XFile(outputImageFile.path);
+      // });
 
       Future.delayed(const Duration(seconds: 3), () async{
-        Navigator.pop(context, imageFile);
+        Navigator.pop(context, faceId);
       });
 
       debugPrint("SUCCESSFULLY TOOK PICTURE");
@@ -88,8 +87,6 @@ class _GetFaceIdState extends State<GetFaceId> {
                           alignment: Alignment.center,
                           child: CameraPreview(_controller)),
                     );
-                } else if (imageFile != null){
-                    return Center(child: Image.file(File(imageFile!.path)));
                 } else {
                   return Center(child: CircularProgressIndicator());
                 }

@@ -1,9 +1,11 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:studentapp/data/user_data.dart';
 import 'package:studentapp/models/course.dart';
 import 'package:studentapp/ui/getMoreStudentInfo/getFaceId.dart';
 import 'package:studentapp/utils/firestore/read.dart';
+import 'package:studentapp/utils/ml_service.dart';
 import 'package:studentapp/widgets/navigation_drawer.dart';
 
 class Courses extends StatefulWidget {
@@ -47,7 +49,8 @@ class CoursesState extends State<Courses> {
             subtitle: Text("${courses[index].code}".toUpperCase()),
             trailing: Icon(Icons.circle, color: courses[index].isStudPresent ? Colors.green : Colors.grey),
             onTap: () async{
-              XFile faceIdFile = await Navigator.push(context, MaterialPageRoute(builder: (context) => GetFaceId()));
+              List faceId = await Navigator.push(context, MaterialPageRoute(builder: (context) => GetFaceId()));
+              bool result = MLService().areIdenticalFaces(faceId, myUserData.faceId);
 
             },
           ),)

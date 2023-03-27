@@ -9,12 +9,12 @@ class UserData {
 
   late String name;
   late String userId;
-  late String faceIdUrl;
+  late List faceId;
   late String profilePicUrl;
   late String email;
   late String password;
 
-  UserData({required this.name, required this.userId, required this.faceIdUrl, required this.profilePicUrl, required this.email, required this.password});
+  UserData({required this.name, required this.userId, required this.faceId, required this.profilePicUrl, required this.email, required this.password});
 
   factory UserData.fromFirestore(var doc) {
     late Map<String, dynamic> data;
@@ -27,7 +27,7 @@ class UserData {
     return UserData(
       name: data['name'],
       userId: data['id'] ?? FirebaseAuth.instance.currentUser!.uid,
-      faceIdUrl: data['face_id_url'],
+      faceId: data['face'],
       profilePicUrl: data['profile_pic_url'],
       email: data['email'],
       password: data['password']

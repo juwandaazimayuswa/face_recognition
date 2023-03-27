@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:studentapp/constants.dart';
+import 'package:studentapp/utils/ml_service.dart';
 
 import 'ui/excuses.dart';
 import 'ui/login.dart';
@@ -13,6 +14,7 @@ import 'package:studentapp/constants.dart';
 void main() async { 
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await MLService.initialize();
 
    runApp(MaterialApp(
     initialRoute: '/',

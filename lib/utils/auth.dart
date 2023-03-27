@@ -70,23 +70,23 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
 
   File profilePicFile = userInfo["profile_pic_file"];
   String profilePicExtension = path.extension(profilePicFile.path);
-  File faceIdFile = userInfo["face_id_file"];
-  String faceIdFileExtension = path.extension(faceIdFile.path);
+  List? faceId = userInfo["face_id"];
+  // String faceIdFileExtension = path.extension(faceIdFile.path);
   String filename = auth.currentUser!.uid;
   Reference profilePicStorageRef = storage.ref().child('profile_pictures/$filename$profilePicExtension');
-  Reference faceIdStorageRef = storage.ref().child('face_ids/$filename$faceIdFileExtension');
+  // Reference faceIdStorageRef = storage.ref().child('face_ids/$filename$faceIdFileExtension');
 
   UploadTask profilePicUploadTask =  profilePicStorageRef.putFile(profilePicFile);
-  UploadTask faceIdUploadTask = faceIdStorageRef.putFile(faceIdFile);
-  bool isFaceIdUploadComplete = false;
+  // UploadTask faceIdUploadTask = faceIdStorageRef.putFile(faceIdFile);
+  // bool isFaceIdUploadComplete = false;
   bool isProfilePicUploadComplete = false;
-  int timeout = 60000; // timeout after 60000 milliseconds
+  int timeout = 120000; // timeout after 60000 milliseconds
   int uploadTime = 0;
 
   ///Get download urls
 
   String? profilePicDownloadUrl;
-  String? faceIdDownloadUrl;
+  // String? faceIdDownloadUrl;
 
   // try {
   //   profilePicDownloadUrl = await profilePicStorageRef.getDownloadURL();
@@ -104,15 +104,15 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
     /// Update the ui based on the amount of the file uploaded
   });
 
-  faceIdUploadTask.snapshotEvents.listen((taskSnapshot) async{
-    /// Update the ui based on the amount of the file uploaded
-  });
-
-  faceIdUploadTask.whenComplete(() async{
-    faceIdDownloadUrl = await faceIdStorageRef.getDownloadURL();
-    debugPrint("face Id download Url: $faceIdDownloadUrl");
-    isFaceIdUploadComplete = true;
-  });
+  // faceIdUploadTask.snapshotEvents.listen((taskSnapshot) async{
+  //   /// Update the ui based on the amount of the file uploaded
+  // });
+  //
+  // faceIdUploadTask.whenComplete(() async{
+  //   faceIdDownloadUrl = await faceIdStorageRef.getDownloadURL();
+  //   debugPrint("face Id download Url: $faceIdDownloadUrl");
+  //   isFaceIdUploadComplete = true;
+  // });
 
   profilePicUploadTask.whenComplete(()async{
     profilePicDownloadUrl = await profilePicStorageRef.getDownloadURL();
@@ -121,11 +121,11 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
   });
 
   /// check at interval of 100 milliseconds if the upload process is complete
-  while((isProfilePicUploadComplete == false || isFaceIdUploadComplete == false)) {
+  while((isProfilePicUploadComplete == false)) {
     await Future.delayed(const Duration(milliseconds: 100));
     uploadTime += 100;
     if (uploadTime > timeout) {
-      debugPrint("Profile pic and face id file upload timeout");
+      debugPrint("Profile pic upload timeout");
       break;
     }
   }
@@ -141,7 +141,7 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
         "email": userEmail,
         "password": userPwd,
         "profile_pic_url": profilePicDownloadUrl,
-        "face_id_url": faceIdDownloadUrl
+        "face_id": faceId
       }, SetOptions(merge: true));
 
     // await db.runTransaction((transaction) async{
@@ -157,7 +157,7 @@ Future<bool> isUserInfoComplete({required String userEmail, required String user
     myUserData = UserData(
         name: "N/A",
         userId: auth.currentUser!.uid,
-        faceIdUrl: faceIdDownloadUrl ?? "",
+        faceId: faceId ?? [],
         profilePicUrl: profilePicDownloadUrl ?? "",
         email: userEmail,
         password: userPwd);
