@@ -16,9 +16,11 @@ Widget buildHeader(BuildContext context) => Container(
   ),
   child: Column(
     children: [
-      CircleAvatar(
-        backgroundColor: Colors.white,
-        radius: 52,
+      Container(
+        clipBehavior: Clip.hardEdge,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(50.0)
+        ),
         child: FirebaseImage(
           imageUrl: myUserData!.profilePicUrl ,
         ),

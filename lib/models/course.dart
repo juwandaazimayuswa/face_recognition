@@ -14,9 +14,9 @@ class Course {
     final data = document.data() as Map<String, dynamic>;
     return Course(
       name: data['name'] as String,
-      id: data['id'] as String,
-      students : data['students'] as List<dynamic>,
-      code: data['code'] as String
+      id: data['id'] ?? 'N/A',
+      students : data['students'] ?? [],
+      code: data['code'] ?? "N/A"
     );
   }
 
