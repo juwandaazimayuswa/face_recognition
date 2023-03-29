@@ -17,6 +17,3 @@ class FirebaseImage extends StatelessWidget {
     );
   }
 }
-
-
-var image  = NetworkImage("");

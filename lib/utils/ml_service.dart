@@ -176,7 +176,7 @@ class MLService {
     return pow(sum, 0.5).toDouble();
   }
 
-  bool areIdenticalFaces(List l1, List l2, {double maxDist = 999.0}) {
+  bool compareFaces(List l1, List l2, {double maxDist = 1.0}) {
     double dist = euclideanDistance(l1, l2);
     debugPrint("CALCULATED EUCLIDEAN DISTANCE: $dist");
     if(dist <= maxDist) {

@@ -27,7 +27,7 @@ class UserData {
     return UserData(
       name: data['name'],
       userId: data['id'] ?? FirebaseAuth.instance.currentUser!.uid,
-      faceId: data['face'],
+      faceId: data['face_id'],
       profilePicUrl: data['profile_pic_url'],
       email: data['email'],
       password: data['password']
