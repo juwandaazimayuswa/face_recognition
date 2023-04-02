@@ -18,8 +18,8 @@ class login extends StatefulWidget {
 
 class loginState extends State<login> {
 
-final usernameController = TextEditingController(text: "nsahsimonai01@gmail.com");
-final passwordController = TextEditingController(text: "1234asdf");
+final usernameController = TextEditingController();
+final passwordController = TextEditingController();
 bool isLoading = false;
 
 FocusNode inputNode = FocusNode();

@@ -33,11 +33,9 @@ class _GetFaceIdState extends State<GetFaceId> {
         ResolutionPreset.high,
       );
       debugPrint("Initializing Camera controller");
-
       setState(() {
         _initializeControllerFuture = _controller.initialize();
       });
-
     });
   }
 
@@ -61,7 +59,6 @@ class _GetFaceIdState extends State<GetFaceId> {
     super.dispose();
   }
 
-
   void _takePhoto() async {
     try {
       // Ensure that the camera is initialized before taking a photo.
@@ -81,11 +78,10 @@ class _GetFaceIdState extends State<GetFaceId> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Face Id')),
+      appBar: AppBar(title: const Text('Face Id')),
       body: Stack(
         children: [
           ModalProgressHUD(
@@ -112,7 +108,7 @@ class _GetFaceIdState extends State<GetFaceId> {
           ),
           Center(
               child: SvgPicture.asset(
-                  'images/face_id.svg',
+                'images/face_id.svg',
                 height: MediaQuery.of(context).size.height * 0.8,
                 width: MediaQuery.of(context).size.width * 0.7,
               )
@@ -122,7 +118,7 @@ class _GetFaceIdState extends State<GetFaceId> {
       floatingActionButton: FloatingActionButton(
         onPressed: _takePhoto,
         tooltip: 'Take Photo',
-        child: Icon(Icons.camera_alt),
+        child: const Icon(Icons.camera_alt),
       ),
     );
   }
