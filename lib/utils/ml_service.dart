@@ -1,25 +1,22 @@
-
-import 'dart:math';
-
-import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
-
 import 'dart:io';
-import "package:camera/camera.dart";
-import 'package:flutter/foundation.dart';
+import 'dart:math';
 // import "package:firebase_ml_vision/firebase_ml_vision.dart";
 // import "package:google_ml_kit/google_ml_kit.dart";
 import 'dart:ui' as ui;
+
+import "package:camera/camera.dart";
+import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:google_mlkit_face_detection/google_mlkit_face_detection.dart';
 import 'package:image/image.dart' as img;
 import 'package:path_provider/path_provider.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 class MLService {
-
   static late Interpreter interpreter;
 
   //Initialize MLService Class
-  static Future<void> initialize() async{
+  static Future<void> initialize() async {
     Delegate? delegate;
     try {
       // if (Platform.isAndroid) {
@@ -39,32 +36,33 @@ class MLService {
       //   );
       // }
 
-      var interpreterOptions = InterpreterOptions();//..addDelegate(delegate!);
+      var interpreterOptions = InterpreterOptions(); //..addDelegate(delegate!);
 
-      interpreter =  await Interpreter.fromAsset('mobilefacenet.tflite', options: interpreterOptions);
+      interpreter = await Interpreter.fromAsset('mobilefacenet.tflite',
+          options: interpreterOptions);
     } catch (e) {
       debugPrint('Failed to load model.');
       debugPrint("$e");
     }
   }
 
-  static InputImageRotation rotationInt2ImageRotation(int rotation){
-      switch(rotation) {
-        case 0:
-          return InputImageRotation.rotation0deg;
-        case 90:
-          return InputImageRotation.rotation90deg;
-        case 180:
-          return InputImageRotation.rotation180deg;
-        default:
-          assert(rotation == 270);
-          return InputImageRotation.rotation270deg;
-      }
+  static InputImageRotation rotationInt2ImageRotation(int rotation) {
+    switch (rotation) {
+      case 0:
+        return InputImageRotation.rotation0deg;
+      case 90:
+        return InputImageRotation.rotation90deg;
+      case 180:
+        return InputImageRotation.rotation180deg;
+      default:
+        assert(rotation == 270);
+        return InputImageRotation.rotation270deg;
+    }
   }
 
   static Uint8List concatenatePlanes(List<Plane> planes) {
     final WriteBuffer allBytes = WriteBuffer();
-    for(Plane plane in planes) {
+    for (Plane plane in planes) {
       allBytes.putUint8List(plane.bytes);
     }
     return allBytes.done().buffer.asUint8List();
@@ -82,11 +80,16 @@ class MLService {
     return file;
   }
 
-  Future<File> cropImage(File imgFile, Rect cropArea, {int width = 500, int height = 500}) async {
+  Future<File> cropImage(File imgFile, Rect cropArea,
+      {int width = 500, int height = 500}) async {
     // final int bytes = await rootBundle.load(imagePath);
     final bytes = await imgFile.readAsBytes();
     final image = img.decodeImage(bytes.buffer.asUint8List());
-    final croppedImage = img.copyCrop(image!, x:cropArea.left.toInt(), y:cropArea.top.toInt(), width: cropArea.width.toInt(), height:cropArea.height.toInt());
+    final croppedImage = img.copyCrop(image!,
+        x: cropArea.left.toInt(),
+        y: cropArea.top.toInt(),
+        width: cropArea.width.toInt(),
+        height: cropArea.height.toInt());
     final resizedImage = img.copyResize(croppedImage, width: 500, height: 500);
     final croppedBytes = img.encodeJpg(resizedImage);
     final codec = await ui.instantiateImageCodec(croppedBytes);
@@ -106,26 +109,26 @@ class MLService {
     return imageFile;
   }
 
-  Future<File?> extractFace(File imageFile) async{
-    try{
-      final image = InputImage.fromFile(imageFile);//fromFilePath(imagePath);
+  Future<File?> extractFace(File imageFile) async {
+    try {
+      final image = InputImage.fromFile(imageFile); //fromFilePath(imagePath);
       final faceDetector = FaceDetector(
         options: FaceDetectorOptions(
-            enableContours: true,
-            enableClassification: true,
-      ),);
+          enableContours: true,
+          enableClassification: true,
+        ),
+      );
       var faces = await faceDetector.processImage(image);
       //Ensure that only one face is detected in the image
       if (faces.length != 1) return null;
       Rect faceArea = faces.first.boundingBox;
       File extractedFace = await cropImage(imageFile, faceArea);
       return extractedFace;
-    }catch(e) {
+    } catch (e) {
       debugPrint("Unable to extract face");
       debugPrint("$e");
       return null;
     }
-
   }
 
   Float32List _imageToByteListFloat32(img.Image image) {
@@ -145,15 +148,15 @@ class MLService {
   }
 
   //Image preprocessing function
-  Future<Float32List> _preProcessImage(File imgFile, {bool isResized = false}) async {
+  Future<Float32List> _preProcessImage(File imgFile,
+      {bool isResized = false}) async {
     //Resize image to dimensions 112 * 112 * 3 if necessary
     final bytes = await imgFile.readAsBytes();
     img.Image? image = img.decodeImage(bytes.buffer.asUint8List());
-    if(isResized == false) image = img.copyResize(image!, width: 112, height: 112);
+    if (isResized == false)
+      image = img.copyResize(image!, width: 112, height: 112);
     return _imageToByteListFloat32(image!);
-
   }
-
 
   Future<List?> predictFaceId(File imgFile) async {
     File? faceImage = await extractFace(imgFile);
@@ -179,12 +182,11 @@ class MLService {
   bool compareFaces(List l1, List l2, {double maxDist = 1.0}) {
     double dist = euclideanDistance(l1, l2);
     debugPrint("CALCULATED EUCLIDEAN DISTANCE: $dist");
-    if(dist <= maxDist) {
+    if (dist <= maxDist) {
       debugPrint("**FACES ARE IDENTICAL");
       return true;
     }
     debugPrint("**FACES ARE UNIDENTICAL");
     return false;
   }
-
 }

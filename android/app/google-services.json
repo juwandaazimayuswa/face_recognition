@@ -1,33 +1,33 @@
 {
   "project_info": {
-    "project_number": "46059946446",
-    "project_id": "bahrain-student-app",
-    "storage_bucket": "bahrain-student-app.appspot.com"
+    "project_number": "762992009510",
+    "project_id": "student-uwaduh",
+    "storage_bucket": "student-uwaduh.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:46059946446:android:3d6b012d2c3bec6249eb9f",
+        "mobilesdk_app_id": "1:762992009510:android:e686cc0cef99cf9cd8a1e7",
         "android_client_info": {
           "package_name": "com.example.studentapp"
         }
       },
       "oauth_client": [
         {
-          "client_id": "46059946446-5p4h8rmm5p87uv9gpg0386vpk8rh41od.apps.googleusercontent.com",
+          "client_id": "762992009510-qhskc8t2ocv48bdrhiqlb5ufq9mogcna.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyCH5oA5y5Fxl1W7fXWMX4sL8agyvUOOROw"
+          "current_key": "AIzaSyDf6faORx48phrJHVakx-s8Nm2-L2jV3Hg"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "46059946446-5p4h8rmm5p87uv9gpg0386vpk8rh41od.apps.googleusercontent.com",
+              "client_id": "762992009510-qhskc8t2ocv48bdrhiqlb5ufq9mogcna.apps.googleusercontent.com",
               "client_type": 3
             }
           ]
